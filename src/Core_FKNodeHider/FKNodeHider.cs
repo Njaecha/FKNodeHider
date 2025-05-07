@@ -23,20 +23,20 @@ namespace FKNodeHider
     {
         public const string PluginName = "FKNodeHider";
         public const string GUID = "org.njaecha.plugins.fknodehider";
-        public const string Version = "0.0.1";
+        public const string Version = "1.0.0";
         
-        private static bool initialized = false;
+        private static bool _initialized;
         
         internal new static ManualLogSource Logger;
         
         public static readonly Dictionary<OCIChar, Dictionary<int, bool>> FkVisibilitySettings = new Dictionary<OCIChar, Dictionary<int, bool>>();
-        private static Toggle HairToggle;
-        private static Toggle SkirtToggle;
-        private static Toggle RightHandToggle;
-        private static Toggle LeftHandToggle;
-        private static Toggle BreastToggle;
-        private static Toggle NeckToggle;
-        private static Toggle BodyToggle;
+        public static Toggle HairToggle {get; private set;}
+        public static Toggle SkirtToggle {get; private set;}
+        public static Toggle RightHandToggle {get; private set;}
+        public static Toggle LeftHandToggle {get; private set;}
+        public static Toggle BreastToggle {get; private set;}
+        public static Toggle NeckToggle {get; private set;}
+        public static Toggle BodyToggle {get; private set;}
         
         public static ConfigEntry<bool> Lines { get; set; }
         
@@ -53,7 +53,7 @@ namespace FKNodeHider
 
         private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            if (!StudioAPI.StudioLoaded || initialized) return;
+            if (!StudioAPI.StudioLoaded || _initialized) return;
             HairToggle = CreateFkViewToggle("Toggle Hair", (int)OIBoneInfo.BoneGroup.Hair);
             SkirtToggle = CreateFkViewToggle("Toggle Skirt", (int)OIBoneInfo.BoneGroup.Skirt);
             RightHandToggle = CreateFkViewToggle("Toggle Right Hand", (int)OIBoneInfo.BoneGroup.RightHand);
@@ -63,7 +63,7 @@ namespace FKNodeHider
             BodyToggle = CreateFkViewToggle("Toggle Body", (int)OIBoneInfo.BoneGroup.Body, 3, 5, 9, 17);
             ChangeAdjustText();
             MoveResetButtons();
-            initialized = true;
+            _initialized = true;
         }
         
         public Toggle CreateFkViewToggle(string elementName, params int[] boneGroups)
@@ -95,7 +95,7 @@ namespace FKNodeHider
 
         public static void UpdateInfo(OCIChar chara)
         {
-            if (!initialized) return;
+            if (!_initialized) return;
             if (HairToggle) HairToggle.isOn = !FkVisibilitySettings.ContainsKey(chara) || !FkVisibilitySettings[chara].ContainsKey((int)OIBoneInfo.BoneGroup.Hair) || FkVisibilitySettings[chara][(int)OIBoneInfo.BoneGroup.Hair];
             if (SkirtToggle) SkirtToggle.isOn = !FkVisibilitySettings.ContainsKey(chara) || !FkVisibilitySettings[chara].ContainsKey((int)OIBoneInfo.BoneGroup.Skirt) || FkVisibilitySettings[chara][(int)OIBoneInfo.BoneGroup.Skirt];
             if (RightHandToggle) RightHandToggle.isOn = !FkVisibilitySettings.ContainsKey(chara) || !FkVisibilitySettings[chara].ContainsKey((int)OIBoneInfo.BoneGroup.RightHand) || FkVisibilitySettings[chara][(int)OIBoneInfo.BoneGroup.RightHand];
