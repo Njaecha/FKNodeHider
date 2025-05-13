@@ -1,0 +1,1 @@
+﻿Plugin for Koikatsu/Koikatsu Sunshine that lets you hide FK Nodes for individual Bonegroups without disabling FK.
